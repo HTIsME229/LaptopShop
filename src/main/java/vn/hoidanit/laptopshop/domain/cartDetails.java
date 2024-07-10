@@ -68,4 +68,10 @@ public class cartDetails {
         this.price = price;
     }
 
+    @Override
+    public String toString() {
+        return "cartDetails [id=" + id + ", cart=" + cart + ", product=" + product + ", quantity=" + quantity
+                + ", price=" + price + "]";
+    }
+
 }
