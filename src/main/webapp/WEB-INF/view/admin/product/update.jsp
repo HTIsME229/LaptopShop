@@ -48,7 +48,8 @@
                                             <hr>
                                             <form:form action="/admin/product/update/${newProduct.id}" method="post"
                                                 modelAttribute="newProduct" enctype="multipart/form-data">
-
+                                                <input type="hidden" name="${_csrf.parameterName}"
+                                                    value="${_csrf.token}" />
                                                 <div class="row">
                                                     <div class="mb-3 col">
                                                         <label for="exampleInputEmail1" class="form-label">Name

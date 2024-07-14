@@ -38,6 +38,8 @@ public class Product {
     private String target;
     @OneToMany(mappedBy = "product")
     private List<OrderDetail> orderDetails;
+    @OneToMany(mappedBy = "product")
+    private List<Review> reviews;
 
     @Override
     public String toString() {

@@ -99,7 +99,7 @@ public class SecurityConfiguration {
     SecurityFilterChain filterChain(final HttpSecurity http,
             WebExpressionAuthorizationManager webExpressionAuthorizationManager) throws Exception {
         http
-                .exceptionHandling((e) -> e.accessDeniedPage("/403"))
+                // .exceptionHandling((e) -> e.accessDeniedPage("/403"))
 
                 .rememberMe((rememberMe) -> rememberMe
                         .rememberMeServices(rememberMeServices()))
@@ -107,8 +107,8 @@ public class SecurityConfiguration {
                 .authorizeHttpRequests(authorize -> authorize // Cấu hình đường dẫn
                         .dispatcherTypeMatchers(DispatcherType.FORWARD, DispatcherType.INCLUDE)
                         .permitAll()
-                        .requestMatchers("/cart/{userId}/**")
-                        .access(webExpressionAuthorizationManager)
+                        // .requestMatchers("/cart/{userId}/**")
+                        // .access(webExpressionAuthorizationManager)
 
                         .requestMatchers("/login", "/client/**", "/css/**", "/js/**", "/images/**", "/register", "/",
                                 "/product/**")

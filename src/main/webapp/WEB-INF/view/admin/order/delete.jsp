@@ -17,14 +17,14 @@
 
             <body>
                 <div class="container mt-3">
-                    <h1>Are you sure delete user With Id: ${id}</h1>
+                    <h1>Are you sure delete Order With Id: ${id}</h1>
                     <div class="alert alert-danger" role="alert">
                         A simple danger alert—check it out!
                     </div>
-                    <form action="/admin/user/delete/${id}" method="post">
+                    <form action="/admin/order/delete/${id}" method="post">
                         <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}" />
                         <button class="btn btn-warning" type="submit">Delete</button>
-                        <button class="btn btn-success"> <a href="/admin/user">Close</a></button>
+                        <button class="btn btn-success"> <a href="/admin/order">Close</a></button>
                     </form>
 
 

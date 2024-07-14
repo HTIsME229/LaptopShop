@@ -43,6 +43,8 @@ public class User {
     private List<Order> orders;
     @OneToOne(mappedBy = "user")
     private cart carts;
+    @OneToMany(mappedBy = "user")
+    private List<Review> reviews;
 
     public cart getCarts() {
         return carts;

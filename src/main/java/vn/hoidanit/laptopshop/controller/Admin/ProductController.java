@@ -15,12 +15,16 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
+import org.springframework.security.core.Authentication;
 
+import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
 import vn.hoidanit.laptopshop.domain.Product;
 import vn.hoidanit.laptopshop.domain.User;
 import vn.hoidanit.laptopshop.service.ProductService;
 import vn.hoidanit.laptopshop.service.UploadService;
+import vn.hoidanit.laptopshop.service.UserService;
+
 import org.springframework.web.bind.annotation.RequestBody;
 
 @Controller
@@ -28,10 +32,12 @@ public class ProductController {
     private PasswordEncoder passwordEncoder;
     private UploadService uploadService;
     private ProductService productService;
+    private UserService userService;
 
-    public ProductController(UploadService uploadService, ProductService productService) {
+    public ProductController(UploadService uploadService, ProductService productService, UserService userService) {
         this.uploadService = uploadService;
         this.productService = productService;
+        this.userService = userService;
     }
 
     @GetMapping("/admin/product")
@@ -73,8 +79,11 @@ public class ProductController {
     }
 
     @PostMapping("/admin/product/delete/{id}")
-    public String postDeleteProduct(@PathVariable long id) {
-        productService.handleDeleteProduct(id);
+    public String postDeleteProduct(@PathVariable long id, Authentication authentication, HttpSession session) {
+        String email = authentication.getName();
+        User user = userService.getUserByEmail(email);
+
+        productService.handleDeleteProduct(id, user, session);
         return "redirect:/admin/product";
     }
 

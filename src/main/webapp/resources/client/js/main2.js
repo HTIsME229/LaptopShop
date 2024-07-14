@@ -132,20 +132,100 @@
 
 
     // Product Quantity
+
     $('.quantity button').on('click', function () {
+        let change = 0;
         var button = $(this);
-        var oldValue = button.parent().parent().find('input').val();
+        var oldValue = button.parent().parent().find('input ').val();
         if (button.hasClass('btn-plus')) {
             var newVal = parseFloat(oldValue) + 1;
+            change = 1;
         } else {
-            if (oldValue > 0) {
+            if (oldValue > 1) {
                 var newVal = parseFloat(oldValue) - 1;
+                change = -1;
             } else {
-                newVal = 0;
+                newVal = 1;
             }
         }
-        button.parent().parent().find('input').val(newVal);
+
+
+
+        const input = button.parent().parent().find('input');
+        input.val(newVal);
+        const index = input.attr("data-cart-detail-index")
+        const el = document.getElementById(`cartDetails${index}.quantity`);
+        $(el).val(newVal);
+
+        const price = input.attr("cd-price");
+        const id = input.attr("cd-id");
+        // let cd = JSON.parse('<%=cd%>');
+
+        const priceElement = $(`p[cd-id='${id}']`);
+        if (priceElement) {
+            const newPrice = +price * newVal;
+            priceElement.text(formatCurrency(newPrice.toFixed(2)) + " đ");
+
+        }
+        const totalPriceElement = $(`p[cd-total-price]`);
+
+        if (totalPriceElement && totalPriceElement.length) {
+            const currentTotal = totalPriceElement.first().attr("cd-total-price");
+            let newTotal = +currentTotal;
+            if (change === 0) {
+                newTotal = +currentTotal;
+            } else {
+                newTotal = change * (+price) + (+currentTotal);
+            }
+            change = 0;
+
+            //update
+            totalPriceElement?.each(function (index, element) {
+                //update text
+                $(totalPriceElement[index]).text(formatCurrency(newTotal.toFixed(2)) + " đ");
+
+                //update data-attribute
+                $(totalPriceElement[index]).attr("cd-total-price", newTotal);
+            });
+        }
+
     });
 
-})(jQuery);
+
+
+
+
+
+    function formatCurrency(value) {
+        // Use the 'vi-VN' locale to format the number according to Vietnamese currency format
+        // and 'VND' as the currency type for Vietnamese đồng
+        const formatter = new Intl.NumberFormat('vi-VN', {
+            style: 'decimal',
+            minimumFractionDigits: 0, // No decimal part for whole numbers
+        });
+
+        let formatted = formatter.format(value);
+        // Replace dots with commas for thousands separator
+        formatted = formatted.replace(/\./g, ',');
+        return formatted;
+    }
+}
+
+)(jQuery);
+// get price
+// const tab = document.querySelectorAll(".tab-content .tab-pane");
+// const btn = document.querySelectorAll(".nav-tabs .nav-link");
+// btn.forEach(e => {
+//     e.onClick = () => {
+//         btn.classList.toggle(".active");
+//         tab.forEach(item => {
+//             item.classList.toggle(".active");
+//         })
+//     }
+
+// });
+
+
+
+
 

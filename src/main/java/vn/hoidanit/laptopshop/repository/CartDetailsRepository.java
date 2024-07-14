@@ -12,6 +12,10 @@ import java.util.List;
 public interface CartDetailsRepository extends JpaRepository<cartDetails, Long> {
     List<cartDetails> findByCart(cart cart);
 
+    void deleteByProduct(Product product);
+
+    void deleteAllByCart(cart cart);
+
     boolean existsByCartAndProduct(cart cart, Product product);
 
     cartDetails findByCartAndProduct(cart cart, Product product);

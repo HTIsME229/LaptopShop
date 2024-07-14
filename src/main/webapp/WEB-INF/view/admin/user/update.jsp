@@ -34,6 +34,8 @@
                                             <hr>
                                             <form:form action="/admin/user/update/${currentData.id}" method="post"
                                                 modelAttribute="currentData">
+                                                <input type="hidden" name="${_csrf.parameterName}"
+                                                    value="${_csrf.token}" />
                                                 <div class="mb-3">
                                                     <label for="exampleInputEmail1" class="form-label">Email
                                                         address</label>

@@ -22,6 +22,7 @@
                         A simple danger alert—check it out!
                     </div>
                     <form action="/admin/product/delete/${id}" method="post">
+                        <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}" />
                         <button class="btn btn-warning" type="submit">Delete</button>
                         <button class="btn btn-success"> <a href="/admin/product">Close</a></button>
                     </form>

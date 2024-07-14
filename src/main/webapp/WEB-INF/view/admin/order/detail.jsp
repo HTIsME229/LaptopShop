@@ -22,10 +22,11 @@
                     <div id="layoutSidenav_content">
                         <main>
                             <div class="container-fluid px-4">
-                                <h1 class="mt-4">Manage Orders</h1>
+                                <h1 class="mt-4">Manage orderDetails</h1>
                                 <ol class="breadcrumb mb-4">
                                     <li class="breadcrumb-item"><a href="/admin">Dashboard</a></li>
-                                    <li class="breadcrumb-item active">Orders</li>
+                                    <li class="breadcrumb-item ">Orders</li>
+                                    <li class="breadcrumb-item active">orderDetails</li>
                                 </ol>
                                 <div class="mt-5">
                                     <div class="row">
@@ -39,44 +40,35 @@
                                             <table class=" table table-bordered table-hover">
                                                 <thead>
                                                     <tr>
-                                                        <th>ID</th>
-                                                        <th>Total Price </th>
-                                                        <th>User</th>
-
-                                                        <th>Tên Khách Hàng</th>
-                                                        <th>Địa Chỉ </th>
-                                                        <th>SĐT</th>
-                                                        <th>Status</th>
-                                                        <th>Action</th>
+                                                        <th>Sản Phẩm</th>
+                                                        <th>Giá cả </th>
+                                                        <th>Số Lượng</th>
+                                                        <th>Tên</th>
+                                                        <th>Thành tiền</th>
                                                     </tr>
                                                 </thead>
                                                 <tbody>
 
-                                                    <c:forEach items="${orders}" var="order">
+                                                    <c:forEach items="${orderDetails}" var="orderDetail">
 
                                                         <tr>
-                                                            <td>${order.id}</td>
+                                                            <td> <img style="width: 100px ; height: 100px;"
+                                                                    class="img-fluid rounded-circle p-3"
+                                                                    src="/images/product/${orderDetail.product.image}"
+                                                                    alt=""></td>
                                                             <td>
                                                                 <fmt:formatNumber type="number"
-                                                                    value="${order.toalPrice}" />đ
+                                                                    value="${orderDetail.price}" />đ
                                                             </td>
-                                                            <td>${order.user.fullName}</td>
-                                                            <td>${order.receiverName}</td>
-                                                            <td>${order.receiverAddress}</td>
-                                                            <td>${order.receiverPhone}</td>
-
-                                                            <td>${order.status}</td>
-
-
-
+                                                            <td>${orderDetail.quanity}</td>
+                                                            <td>${orderDetail.product.name}</td>
                                                             <td>
-                                                                <a href="/admin/order/${order.id}"
-                                                                    class="btn btn-success">View</a>
-                                                                <a href="/admin/order/update/${order.id}"
-                                                                    class="btn btn-warning  mx-2">Update</a>
-                                                                <a href="/admin/order/delete/${order.id}"
-                                                                    class="btn btn-danger">Delete</a>
+                                                                <fmt:formatNumber type="number"
+                                                                    value="${orderDetail.price *orderDetail.quanity}" />
+                                                                đ
                                                             </td>
+
+
                                                         </tr>
 
                                                     </c:forEach>

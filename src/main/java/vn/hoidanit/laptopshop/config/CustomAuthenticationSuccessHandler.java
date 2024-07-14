@@ -1,6 +1,8 @@
 package vn.hoidanit.laptopshop.config;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
@@ -12,11 +14,15 @@ import jakarta.servlet.http.HttpSession;
 import jakarta.validation.constraints.Null;
 import vn.hoidanit.laptopshop.domain.User;
 import vn.hoidanit.laptopshop.domain.cart;
+import vn.hoidanit.laptopshop.domain.cartDetails;
+import vn.hoidanit.laptopshop.service.ProductService;
 import vn.hoidanit.laptopshop.service.UserService;
 
 public class CustomAuthenticationSuccessHandler implements AuthenticationSuccessHandler {
     @Autowired
     UserService userService;
+    @Autowired
+    ProductService productService;
 
     protected void setSessionAttribute(HttpServletRequest request, Authentication authentication) {
         HttpSession session = request.getSession(false);
@@ -31,12 +37,17 @@ public class CustomAuthenticationSuccessHandler implements AuthenticationSuccess
             session.setAttribute("avatar", user.getAvatar());
             session.setAttribute("id", user.getId());
             session.setAttribute("email", user.getEmail());
+            List<Long> toal = new ArrayList();
+
             cart c = user.getCarts();
             int sum;
             if (c == null) {
                 sum = 0;
+
             } else {
                 sum = user.getCarts().getSum();
+                List<cartDetails> cd = this.productService.handleGetCartDetailByUser(user);
+
             }
 
             session.setAttribute("sum", sum);
