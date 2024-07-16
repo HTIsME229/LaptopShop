@@ -49,11 +49,11 @@ public class OrderDetail {
         this.product = product;
     }
 
-    public long getQuanity() {
+    public long getQuantity() {
         return quantity;
     }
 
-    public void setQuanity(long quantity) {
+    public void setQuantity(long quantity) {
         this.quantity = quantity;
     }
 

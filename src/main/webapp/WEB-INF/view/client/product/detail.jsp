@@ -125,9 +125,17 @@
                                                     </button>
                                                 </div>
                                             </div>
-                                            <a href="#"
-                                                class="btn border border-secondary rounded-pill px-4 py-2 mb-4 text-primary"><i
-                                                    class="fa fa-shopping-bag me-2 text-primary"></i> Add to cart</a>
+                                            <form action="/add-product-to-cart/${dataProduct.id}" method="post">
+                                                <input type="hidden" name="${_csrf.parameterName}"
+                                                    value="${_csrf.token}" />
+                                                <input type="hidden" class="currentQuantity" name="currentQuantity"
+                                                    type="number">
+                                                <button type="submit"
+                                                    class="btn border border-secondary rounded-pill px-4 py-2 mb-4 text-primary"><i
+                                                        class="fa fa-shopping-bag me-2 text-primary"></i> Add to
+                                                    cart</button>
+                                            </form>
+
                                         </div>
                                         <div class="col-lg-12">
                                             <nav>

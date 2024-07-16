@@ -2,6 +2,7 @@ package vn.hoidanit.laptopshop.controller.Admin;
 
 import java.util.List;
 
+import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -47,6 +48,7 @@ public class OrderController {
         Order order = this.productService.handleGetOrderById(id);
         List<OrderDetail> orderDetails = order.getOrderDetails();
         model.addAttribute("orderDetails", orderDetails);
+
         return "admin/order/detail";
     }
 
@@ -79,6 +81,15 @@ public class OrderController {
     public String postMethodName(@PathVariable long id) {
         this.productService.handleDeleteOrder(id);
         return "redirect:/admin/order";
+    }
+
+    @GetMapping("/order-history")
+    public String getOrderHistoryPage(Model model, Authentication authentication) {
+        List<Order> order = this.productService.handleOrderHistory(authentication);
+        // List<OrderDetail> listOrder = order.getOrderDetails();
+        // model.addAttribute("listOrder", listOrder);
+        model.addAttribute("order", order);
+        return "client/Order/history";
     }
 
 }

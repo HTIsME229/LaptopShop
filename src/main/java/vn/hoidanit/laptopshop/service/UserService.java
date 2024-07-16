@@ -7,6 +7,8 @@ import org.springframework.stereotype.Service;
 import vn.hoidanit.laptopshop.domain.Role;
 import vn.hoidanit.laptopshop.domain.User;
 import vn.hoidanit.laptopshop.domain.dto.authDTO;
+import vn.hoidanit.laptopshop.repository.OrderRepository;
+import vn.hoidanit.laptopshop.repository.ProductRespository;
 import vn.hoidanit.laptopshop.repository.RoleRespository;
 import vn.hoidanit.laptopshop.repository.UserRepository;
 
@@ -14,10 +16,15 @@ import vn.hoidanit.laptopshop.repository.UserRepository;
 public class UserService {
     private UserRepository userRepository;
     private RoleRespository roleRespository;
+    private OrderRepository orderRepository;
+    private ProductRespository productRespository;
 
-    public UserService(UserRepository userRepository, RoleRespository roleRespository) {
+    public UserService(UserRepository userRepository, RoleRespository roleRespository, OrderRepository orderRepository,
+            ProductRespository productRespository) {
         this.userRepository = userRepository;
         this.roleRespository = roleRespository;
+        this.orderRepository = orderRepository;
+        this.productRespository = productRespository;
     }
 
     public String handleHello() {
@@ -67,5 +74,17 @@ public class UserService {
 
     public User getUserByEmail(String email) {
         return this.userRepository.findByEmail(email);
+    }
+
+    public long countOrders() {
+        return this.orderRepository.count();
+    }
+
+    public long countProducts() {
+        return this.productRespository.count();
+    }
+
+    public long countUsers() {
+        return this.userRepository.count();
     }
 }

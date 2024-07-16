@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
-import org.springframework.boot.autoconfigure.neo4j.Neo4jProperties.Authentication;
+import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
 
 import jakarta.transaction.Transactional;
@@ -72,7 +72,7 @@ public class ProductService {
         return productRespository.findById(id);
     }
 
-    public void handleAddProductToCart(String email, long product_id, HttpSession session) {
+    public void handleAddProductToCart(String email, long product_id, HttpSession session, Long currentQuantity) {
         User user = this.userService.getUserByEmail(email);
         if (user != null) {
             cart cart = this.cartRepository.findByUser(user);
@@ -90,7 +90,12 @@ public class ProductService {
                 cd.setCart(cart);
                 cd.setProduct(p);
                 cd.setPrice(p.getPrice());
-                cd.setQuantity(1);
+                if (currentQuantity != 0) {
+                    cd.setQuantity(currentQuantity);
+                } else {
+                    cd.setQuantity(1);
+                }
+
                 int s = cart.getSum() + 1;
                 cart.setSum(cart.getSum() + 1);
                 session.setAttribute("sum", s);
@@ -98,7 +103,11 @@ public class ProductService {
                 this.cartDetailsRepository.save(cd);
 
             } else {
-                oldDetails.setQuantity(oldDetails.getQuantity() + 1);
+                if (currentQuantity != 0) {
+                    oldDetails.setQuantity(oldDetails.getQuantity() + currentQuantity);
+                } else {
+                    oldDetails.setQuantity(oldDetails.getQuantity() + 1);
+                }
 
                 this.cartDetailsRepository.save(oldDetails);
 
@@ -201,7 +210,7 @@ public class ProductService {
                 orderDetail.setOrder(order);
                 orderDetail.setProduct(cartDetails.getProduct());
                 orderDetail.setPrice(cartDetails.getPrice());
-                orderDetail.setQuanity(cartDetails.getQuantity());
+                orderDetail.setQuantity(cartDetails.getQuantity());
 
                 ListorderDetail.add(orderDetail);
 
@@ -233,5 +242,11 @@ public class ProductService {
         Order order = orderRepository.findById(id);
         orderDetailsRepository.deleteByOrder(order);
         orderRepository.deleteById(order.getId());
+    }
+
+    public List<Order> handleOrderHistory(Authentication authentication) {
+        String email = authentication.getName();
+        User user = userService.getUserByEmail(email);
+        return orderRepository.findByUser(user);
     }
 }

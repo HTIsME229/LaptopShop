@@ -60,15 +60,13 @@
                                                                 <fmt:formatNumber type="number"
                                                                     value="${orderDetail.price}" />đ
                                                             </td>
-                                                            <td>${orderDetail.quanity}</td>
+                                                            <td>${orderDetail.quantity}</td>
                                                             <td>${orderDetail.product.name}</td>
                                                             <td>
                                                                 <fmt:formatNumber type="number"
-                                                                    value="${orderDetail.price *orderDetail.quanity}" />
+                                                                    value="${orderDetail.price *orderDetail.quantity}" />
                                                                 đ
                                                             </td>
-
-
                                                         </tr>
 
                                                     </c:forEach>

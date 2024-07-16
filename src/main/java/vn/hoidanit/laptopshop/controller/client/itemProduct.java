@@ -51,12 +51,12 @@ public class itemProduct {
     }
 
     @PostMapping("/add-product-to-cart/{id}")
-    public String postAddToCart(@PathVariable long id, HttpServletRequest request) {
+    public String postAddToCart(@PathVariable long id, HttpServletRequest request,
+            @RequestParam(defaultValue = "0") long currentQuantity) {
         long product_id = id;
         HttpSession session = request.getSession(false);
-
         String email = (String) session.getAttribute("email");
-        this.productService.handleAddProductToCart(email, product_id, session);
+        this.productService.handleAddProductToCart(email, product_id, session, currentQuantity);
         return "redirect:/";
     }
 

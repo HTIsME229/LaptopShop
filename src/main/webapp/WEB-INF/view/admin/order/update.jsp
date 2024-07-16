@@ -34,7 +34,7 @@
                                         <div class="col-md-6  mx-auto">
                                             <h1>Update A Order Status</h1>
                                             <hr>
-                                            <form:form action="/admin/order /update/${order.id}" method="post"
+                                            <form:form action="/admin/order/update/${order.id}" method="post"
                                                 modelAttribute="order">
                                                 <input type="hidden" name="${_csrf.parameterName}"
                                                     value="${_csrf.token}" />

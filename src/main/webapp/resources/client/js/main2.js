@@ -150,7 +150,10 @@
         }
 
 
+        const currentQuantity = $('form').find('.currentQuantity');
 
+        currentQuantity.val(newVal);
+        console.log(currentQuantity.val(newVal))
         const input = button.parent().parent().find('input');
         input.val(newVal);
         const index = input.attr("data-cart-detail-index")

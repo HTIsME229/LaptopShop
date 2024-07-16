@@ -5,9 +5,13 @@ import org.springframework.stereotype.Repository;
 
 import vn.hoidanit.laptopshop.domain.Order;
 import vn.hoidanit.laptopshop.domain.OrderDetail;
+import vn.hoidanit.laptopshop.domain.User;
+
 import java.util.List;
 
 @Repository
 public interface OrderRepository extends JpaRepository<Order, Long> {
     Order findById(long id);
+
+    List<Order> findByUser(User user);
 }
