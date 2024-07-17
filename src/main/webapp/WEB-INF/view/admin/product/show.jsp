@@ -1,5 +1,6 @@
 <%@page contentType="text/html" pageEncoding="UTF-8" %>
     <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+
         <!DOCTYPE html>
         <html lang="en">
 
@@ -77,6 +78,36 @@
 
                             </div>
                         </div>
+                        <nav aria-label="Page navigation example">
+                            <ul class="pagination justify-content-center">
+                                <c:if test="${currentPage ne 0}">
+                                    <li class="page-item">
+                                        <a class="page-link" href="/admin/product?page=${currentPage}"
+                                            aria-label="Previous">
+                                            <span aria-hidden="true">&laquo;</span>
+                                        </a>
+                                    </li>
+                                </c:if>
+
+                                <c:forEach var="i" begin="1" end="${totalPage}">
+                                    <li class="page-item">
+                                        <a class="page-link ${i == currentPage + 1  ? 'active':''}"
+                                            href="/admin/product?page=${i}">
+                                            ${i}
+                                        </a>
+                                    </li>
+                                </c:forEach>
+                                <c:if test="${currentPage +1 lt totalPage}">
+                                    <li class="page-item">
+                                        <a class="page-link" href="/admin/product?page=${currentPage+2}"
+                                            aria-label="Next">
+                                            <span aria-hidden="true">&raquo;</span>
+                                        </a>
+                                    </li>
+                                </c:if>
+
+                            </ul>
+                        </nav>
                     </main>
                     <jsp:include page="../layout/footer.jsp" />
                 </div>

@@ -4,8 +4,8 @@
             <div class="container py-5">
                 <div class="row g-5 align-items-center">
                     <div class="col-md-12 col-lg-7">
-                        <h4 class="mb-3 text-secondary">100% Sản Phẩm Chính Hãng </h4>
-                        <h1 class="mb-5 display-3 text-primary">Hàng Cao Cấp </h1>
+                        <h4 class="mb-3 text-secondary">100% Original Product </h4>
+                        <h1 class="mb-5 display-3 text-primary">Hight Quality </h1>
                         <div class="position-relative mx-auto">
                             <input class="form-control border-2 border-secondary w-75 py-3 px-4 rounded-pill"
                                 type="number" placeholder="Search">

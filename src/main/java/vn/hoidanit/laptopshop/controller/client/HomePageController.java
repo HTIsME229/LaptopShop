@@ -3,6 +3,9 @@ package vn.hoidanit.laptopshop.controller.client;
 import java.util.List;
 
 import org.springframework.boot.autoconfigure.jms.JmsProperties.Listener.Session;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -23,8 +26,11 @@ public class HomePageController {
 
     @GetMapping("/")
     public String getHomePage(Model model, HttpServletRequest request) {
-        List<Product> ListProduct = this.productService.handleGetAllProDuct();
 
+        Pageable pageable = PageRequest.of(0, 10);
+        Page<Product> Product = productService.handleGetAllProDuct(pageable);
+
+        List<Product> ListProduct = Product.getContent();
         model.addAttribute("ListProduct", ListProduct);
         return "client/homepage/show";
     }

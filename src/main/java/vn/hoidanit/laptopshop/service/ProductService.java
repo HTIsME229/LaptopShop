@@ -4,6 +4,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
 
@@ -52,8 +54,8 @@ public class ProductService {
         return this.productRespository.save(product);
     }
 
-    public List<Product> handleGetAllProDuct() {
-        return this.productRespository.findAll();
+    public Page<Product> handleGetAllProDuct(Pageable pageable) {
+        return this.productRespository.findAll(pageable);
     }
 
     @Transactional
@@ -224,8 +226,8 @@ public class ProductService {
 
     }
 
-    public List<Order> handleGetAllOrder() {
-        return orderRepository.findAll();
+    public Page<Order> handleGetAllOrder(Pageable pageable) {
+        return orderRepository.findAll(pageable);
     }
 
     public Order handleGetOrderById(long id) {

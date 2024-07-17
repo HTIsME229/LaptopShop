@@ -1,6 +1,7 @@
 package vn.hoidanit.laptopshop.controller.Admin;
 
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
@@ -15,6 +16,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.security.core.Authentication;
 
 import jakarta.servlet.http.HttpSession;
@@ -41,10 +45,25 @@ public class ProductController {
     }
 
     @GetMapping("/admin/product")
-    public String getDasBoard(Model model) {
+    public String getDasBoard(Model model, @RequestParam("page") Optional<String> pageOptional) {
+        int page = 1;
+        try {
+            if (pageOptional.isPresent()) {
+                page = Integer.parseInt(pageOptional.get());
+            } else {
 
-        List<Product> arrProduct = productService.handleGetAllProDuct();
-        System.out.println(arrProduct);
+            }
+        } catch (Exception e) {
+
+        }
+
+        Pageable pageable = PageRequest.of(page - 1, 4);
+        Page<Product> Product = productService.handleGetAllProDuct(pageable);
+        List<Product> arrProduct = Product.getContent();
+        int currentPage = pageable.getPageNumber();
+        int totalPage = Product.getTotalPages();
+        model.addAttribute("currentPage", currentPage);
+        model.addAttribute("totalPage", totalPage);
         model.addAttribute("arrProduct", arrProduct);
 
         return "admin/product/show";

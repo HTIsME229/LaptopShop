@@ -99,7 +99,7 @@ public class SecurityConfiguration {
     SecurityFilterChain filterChain(final HttpSecurity http,
             WebExpressionAuthorizationManager webExpressionAuthorizationManager) throws Exception {
         http
-                // .exceptionHandling((e) -> e.accessDeniedPage("/403"))
+                .exceptionHandling((e) -> e.accessDeniedPage("/403"))
 
                 .rememberMe((rememberMe) -> rememberMe
                         .rememberMeServices(rememberMeServices()))

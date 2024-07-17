@@ -1,6 +1,12 @@
 package vn.hoidanit.laptopshop.controller.Admin;
 
 import java.util.List;
+import java.util.Optional;
+
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -20,6 +26,7 @@ import vn.hoidanit.laptopshop.service.UserService;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.GetMapping;
 
 @Controller
 public class UserController {
@@ -60,9 +67,24 @@ public class UserController {
     }
 
     @RequestMapping("/admin/user")
-    public String getTableUser(Model model) {
-        List<User> arrUsers = this.userService.getAllUser();
+    public String getTableUser(Model model, @RequestParam("page") Optional<String> pageOptional) {
+        int page = 1;
+        try {
+            if (pageOptional.isPresent()) {
+                page = Integer.parseInt(pageOptional.get());
+            } else {
 
+            }
+        } catch (Exception e) {
+
+        }
+        Pageable pageable = PageRequest.of(page - 1, 5);
+        Page<User> arrUser = this.userService.getAllUser(pageable);
+        List<User> arrUsers = arrUser.getContent();
+        int totalPage = arrUser.getTotalPages();
+        int currentPage = pageable.getPageNumber();
+        model.addAttribute("totalPage", totalPage);
+        model.addAttribute("currentPage", currentPage);
         model.addAttribute("arrUsers", arrUsers);
         return "admin/user/show";
 
@@ -128,6 +150,57 @@ public class UserController {
 
         this.userService.deleteUserById(id);
         return "redirect:/admin/user";
+    }
+
+    @RequestMapping("/manage-account")
+    public String getManageAccountPage(Authentication authentication, Model model) {
+        String email = authentication.getName();
+        User currentData = this.userService.getUserByEmail(email);
+
+        model.addAttribute("currentData", currentData);
+        return "client/Auth/account";
+
+    }
+
+    @PostMapping("/manage-account")
+    public String postMethodName(Model model, @ModelAttribute("currentData") User dataUpdate,
+            Authentication authentication, @RequestParam("file") MultipartFile file) {
+        String email = authentication.getName();
+        User currentUser = this.userService.getUserByEmail(email);
+        String avatar = this.uploadService.handleSaveUploadFile(file, "avatar");
+
+        if (dataUpdate != null) {
+            currentUser.setAddress(dataUpdate.getAddress());
+            currentUser.setFullName(dataUpdate.getFullName());
+            currentUser.setPhone(dataUpdate.getPhone());
+            currentUser.setAvatar(avatar);
+            this.userService.handleSaveUser(currentUser);
+        }
+        return "redirect:/manage-account";
+    }
+
+    @GetMapping("/change-password")
+    public String getMethodName(Authentication authentication, Model model) {
+        String email = authentication.getName();
+        User currentData = this.userService.getUserByEmail(email);
+        model.addAttribute("currentData", currentData);
+        return "client/Auth/changepassword";
+    }
+
+    @PostMapping("/change-password")
+    public String postMethodName(@RequestParam("oldPassword") String oldPassword,
+            @RequestParam("newPassword") String newPassword, Authentication authentication) {
+        String email = authentication.getName();
+        User currentUser = this.userService.getUserByEmail(email);
+
+        String hashNewPassword = this.passwordEncoder.encode(newPassword);
+
+        if (this.passwordEncoder.matches(oldPassword, currentUser.getPassword())) {
+            currentUser.setPassword(hashNewPassword);
+            this.userService.handleSaveUser(currentUser);
+            return "redirect:/";
+        }
+        return "redirect:/manage-account";
     }
 
 }
