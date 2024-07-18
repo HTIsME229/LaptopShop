@@ -58,8 +58,14 @@
 
 
                                         <div class="mb-3">
+                                            <c:if test="${ not empty errMes}">
+                                                <div style="display: block;" id="validationServerUsernameFeedback"
+                                                    class="invalid-feedback">
+                                                    Password not match</div>
+                                            </c:if>
                                             <label for="exampleInputPassword1" class="form-label">Old Password</label>
-                                            <input name="oldPassword" type="password" class="form-control"
+                                            <input name="oldPassword" type="password"
+                                                class="form-control ${ not empty errMes ? 'is-invalid' : ''}"
                                                 id="exampleInputPassword1" />
                                         </div>
                                         <div class="mb-3">

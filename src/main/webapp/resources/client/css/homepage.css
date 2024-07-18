@@ -565,3 +565,7 @@
 .fruite-img img {
     object-fit: cover;
 }
+
+.information-shop {
+    grid-template-columns: repeat(3, 320px);
+}

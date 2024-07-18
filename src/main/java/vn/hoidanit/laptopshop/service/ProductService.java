@@ -6,6 +6,7 @@ import java.util.Optional;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
 
@@ -13,6 +14,7 @@ import jakarta.transaction.Transactional;
 import vn.hoidanit.laptopshop.domain.Order;
 import vn.hoidanit.laptopshop.domain.OrderDetail;
 import vn.hoidanit.laptopshop.domain.Product;
+import vn.hoidanit.laptopshop.domain.Product_;
 import vn.hoidanit.laptopshop.domain.Review;
 import vn.hoidanit.laptopshop.domain.User;
 import vn.hoidanit.laptopshop.domain.cart;
@@ -23,6 +25,7 @@ import vn.hoidanit.laptopshop.repository.OrderDetailsRepository;
 import vn.hoidanit.laptopshop.repository.OrderRepository;
 import vn.hoidanit.laptopshop.repository.ProductRespository;
 import vn.hoidanit.laptopshop.repository.ReviewRepository;
+import vn.hoidanit.laptopshop.service.Specfication.ProducSpecs;
 import jakarta.servlet.http.HttpSession;
 
 @Service
@@ -56,6 +59,32 @@ public class ProductService {
 
     public Page<Product> handleGetAllProDuct(Pageable pageable) {
         return this.productRespository.findAll(pageable);
+    }
+
+    public Page<Product> handleGetAllProDuctWithSpec(Pageable pageable, String name, List<String> factory, int start,
+            int end, int max, int min, List<String> target) {
+        Specification<Product> spec = Specification.where(null);
+        if (name != null) {
+            spec = spec.and(ProducSpecs.nameLike(name));
+        }
+        if (factory != null && !factory.isEmpty()) {
+            spec = spec.and(ProducSpecs.factoryLike(factory));
+        }
+        if (start != 0 && end != 0) {
+            spec = spec.and(ProducSpecs.betweenPrice(start, end));
+        }
+        if (max != 0) {
+            spec = spec.and(ProducSpecs.maxPrice(max));
+        }
+        if (min != 0) {
+            spec = spec.and(ProducSpecs.minPrice(min));
+        }
+        if (target != null && !target.isEmpty()) {
+            spec = spec.and(ProducSpecs.targetLike(target));
+        }
+
+        return this.productRespository.findAll(spec, pageable);
+
     }
 
     @Transactional

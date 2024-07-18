@@ -56,7 +56,7 @@ public class ProductController {
         } catch (Exception e) {
 
         }
-
+        String name = "";
         Pageable pageable = PageRequest.of(page - 1, 4);
         Page<Product> Product = productService.handleGetAllProDuct(pageable);
         List<Product> arrProduct = Product.getContent();

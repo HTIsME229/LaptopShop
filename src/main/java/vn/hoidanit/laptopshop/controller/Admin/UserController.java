@@ -188,7 +188,7 @@ public class UserController {
     }
 
     @PostMapping("/change-password")
-    public String postMethodName(@RequestParam("oldPassword") String oldPassword,
+    public String postMethodName(@RequestParam("oldPassword") String oldPassword, Model model,
             @RequestParam("newPassword") String newPassword, Authentication authentication) {
         String email = authentication.getName();
         User currentUser = this.userService.getUserByEmail(email);
@@ -198,9 +198,14 @@ public class UserController {
         if (this.passwordEncoder.matches(oldPassword, currentUser.getPassword())) {
             currentUser.setPassword(hashNewPassword);
             this.userService.handleSaveUser(currentUser);
-            return "redirect:/";
+            return "redirect:/manage-account";
+        } else {
+            String errMes = "Password Not Match ";
+            model.addAttribute("currentData", currentUser);
+            model.addAttribute("errMes", errMes);
+            return "client/Auth/changepassword";
         }
-        return "redirect:/manage-account";
+
     }
 
 }

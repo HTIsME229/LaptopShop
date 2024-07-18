@@ -28,6 +28,7 @@ public class HomePageController {
     public String getHomePage(Model model, HttpServletRequest request) {
 
         Pageable pageable = PageRequest.of(0, 10);
+        String name = "";
         Page<Product> Product = productService.handleGetAllProDuct(pageable);
 
         List<Product> ListProduct = Product.getContent();

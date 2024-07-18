@@ -212,22 +212,53 @@
         formatted = formatted.replace(/\./g, ',');
         return formatted;
     }
+
+
 }
 
+
 )(jQuery);
-// get price
-// const tab = document.querySelectorAll(".tab-content .tab-pane");
-// const btn = document.querySelectorAll(".nav-tabs .nav-link");
-// btn.forEach(e => {
-//     e.onClick = () => {
-//         btn.classList.toggle(".active");
-//         tab.forEach(item => {
-//             item.classList.toggle(".active");
-//         })
-//     }
+const checkInput = document.querySelectorAll('.form-check-input');
+const arr = Object.values(checkInput);
 
-// });
+const filter = document.getElementById('filter')
+let Link = "http://localhost:8080/products?page=1";
 
+filter.onclick = (event) => {
+    Link = "http://localhost:8080/products?page=1";
+    let factoryNames = [];
+    let price_range = [];
+    let targetNames = [];
+    let max = 0;
+    let min = 0;
+    arr.forEach(e => {
+
+        if (e.checked && e.className.includes("factory")) {
+            factoryNames.push(e.value)
+            Link = `http://localhost:8080/products?page=1&factoryNames=${factoryNames}`;
+        }
+        else if (e.checked && e.className.includes("price_range")) {
+            price_range.push(e.value)
+            Link = `${Link}` + `&price_range=${price_range}`;
+
+        }
+
+        else if (e.checked && e.className.includes("target")) {
+
+            targetNames.push(e.value);
+            Link = `http://localhost:8080/products?page=1&factoryNames=${factoryNames}&targetNames=${targetNames}`;
+
+        }
+
+
+
+
+        // event.preventDefault()
+        filter.href = Link;
+
+    })
+    console.log(Link)
+};
 
 
 

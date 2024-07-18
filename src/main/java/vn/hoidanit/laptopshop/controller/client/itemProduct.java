@@ -8,8 +8,9 @@ import vn.hoidanit.laptopshop.domain.cartDetails;
 import vn.hoidanit.laptopshop.repository.CartRepository;
 
 import java.util.ArrayList;
+import java.util.List;
+import java.util.Optional;
 
-import org.hibernate.mapping.List;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -18,6 +19,10 @@ import org.springframework.web.bind.annotation.PathVariable;
 
 import vn.hoidanit.laptopshop.service.ProductService;
 import vn.hoidanit.laptopshop.service.UserService;
+
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.security.core.Authentication;
 
 import org.springframework.web.bind.annotation.PostMapping;
@@ -135,6 +140,65 @@ public class itemProduct {
         this.productService.handlePostReview(review, user, id);
 
         return "redirect:/product/{id}";
+    }
+
+    @GetMapping("/products")
+    public String getShopsPage(Model model, @RequestParam("page") Optional<String> pageOptional,
+
+            @RequestParam("name") Optional<String> nameOptional,
+            @RequestParam("factoryNames") Optional<List<String>> factoryNames,
+            @RequestParam("targetNames") Optional<List<String>> targetNames,
+            @RequestParam("price_range") Optional<String> price_range) {
+        int page = 1;
+        try {
+            if (pageOptional.isPresent()) {
+                page = Integer.parseInt(pageOptional.get());
+            } else {
+
+            }
+        } catch (Exception e) {
+
+        }
+        int max = 0;
+        int min = 0;
+        int start = 0;
+        int end = 1000000000;
+        if (price_range.isPresent()) {
+            switch (price_range.get()) {
+                case "10-15-trieu":
+                    start = 10000000;
+                    end = 15000000;
+                    break;
+                case "10-20-trieu":
+                    start = 15000000;
+                    end = 20000000;
+                    break;
+                case "duoi-10-trieu":
+                    max = 10000000;
+                    break;
+                case "tren-20-trieu":
+                    min = 20000000;
+                    break;
+                default:
+                    break;
+
+            }
+        }
+
+        String name = nameOptional.isPresent() ? nameOptional.get() : "";
+        List<String> factory = factoryNames.isPresent() ? factoryNames.get() : new ArrayList<>();
+        List<String> target = targetNames.isPresent() ? targetNames.get() : new ArrayList<>();
+
+        Pageable pageable = PageRequest.of(page - 1, 8);
+        Page<Product> Product = productService.handleGetAllProDuctWithSpec(pageable, name, factory, start,
+                end, max, min, target);
+        List<Product> arrProduct = Product.getContent();
+        int currentPage = pageable.getPageNumber();
+        int totalPage = Product.getTotalPages();
+        model.addAttribute("currentPage", currentPage);
+        model.addAttribute("totalPage", totalPage);
+        model.addAttribute("arrProduct", arrProduct);
+        return "client/product/shop";
     }
 
 }

@@ -15,9 +15,9 @@
                         <div class="collapse navbar-collapse bg-white" id="navbarCollapse"
                             style="justify-content: space-between;">
                             <div class="navbar-nav mx-5 ">
-                                <a href="/" class="nav-item nav-link active">Home</a>
+                                <a href="/" class="nav-item nav-link    ">Home</a>
 
-                                <a href="/shop" class="nav-item nav-link">Shop</a>
+                                <a href="/products" class="nav-item nav-link">Shop</a>
 
 
                             </div>
