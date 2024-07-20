@@ -5,6 +5,7 @@ import vn.hoidanit.laptopshop.domain.Review;
 import vn.hoidanit.laptopshop.domain.User;
 import vn.hoidanit.laptopshop.domain.cart;
 import vn.hoidanit.laptopshop.domain.cartDetails;
+import vn.hoidanit.laptopshop.domain.dto.ProductCriteriaDTO;
 import vn.hoidanit.laptopshop.repository.CartRepository;
 
 import java.util.ArrayList;
@@ -23,6 +24,7 @@ import vn.hoidanit.laptopshop.service.UserService;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.security.core.Authentication;
 
 import org.springframework.web.bind.annotation.PostMapping;
@@ -143,62 +145,36 @@ public class itemProduct {
     }
 
     @GetMapping("/products")
-    public String getShopsPage(Model model, @RequestParam("page") Optional<String> pageOptional,
+    public String getShopsPage(Model model, Optional<ProductCriteriaDTO> ProductCriteriaDTO,
+            HttpServletRequest request
 
-            @RequestParam("name") Optional<String> nameOptional,
-            @RequestParam("factoryNames") Optional<List<String>> factoryNames,
-            @RequestParam("targetNames") Optional<List<String>> targetNames,
-            @RequestParam("price_range") Optional<String> price_range) {
-        int page = 1;
-        try {
-            if (pageOptional.isPresent()) {
-                page = Integer.parseInt(pageOptional.get());
-            } else {
+    ) {
+        String qs = request.getQueryString();
 
-            }
-        } catch (Exception e) {
+        ProductCriteriaDTO productCriteriaDTO = ProductCriteriaDTO.isPresent() ? ProductCriteriaDTO.get()
+                : new ProductCriteriaDTO();
+        Pageable pageable = PageRequest
+                .of(productCriteriaDTO.getPage() != null
+                        ? (productCriteriaDTO.getPage().isPresent()
+                                ? productCriteriaDTO.getPage().get() - 1
+                                : 0)
+                        : 0,
+                        8);
 
-        }
-        int max = 0;
-        int min = 0;
-        int start = 0;
-        int end = 1000000000;
-        if (price_range.isPresent()) {
-            switch (price_range.get()) {
-                case "10-15-trieu":
-                    start = 10000000;
-                    end = 15000000;
-                    break;
-                case "10-20-trieu":
-                    start = 15000000;
-                    end = 20000000;
-                    break;
-                case "duoi-10-trieu":
-                    max = 10000000;
-                    break;
-                case "tren-20-trieu":
-                    min = 20000000;
-                    break;
-                default:
-                    break;
-
-            }
-        }
-
-        String name = nameOptional.isPresent() ? nameOptional.get() : "";
-        List<String> factory = factoryNames.isPresent() ? factoryNames.get() : new ArrayList<>();
-        List<String> target = targetNames.isPresent() ? targetNames.get() : new ArrayList<>();
-
-        Pageable pageable = PageRequest.of(page - 1, 8);
-        Page<Product> Product = productService.handleGetAllProDuctWithSpec(pageable, name, factory, start,
-                end, max, min, target);
+        Page<Product> Product = productService.handleGetAllProDuctWithSpec(pageable, productCriteriaDTO);
         List<Product> arrProduct = Product.getContent();
         int currentPage = pageable.getPageNumber();
         int totalPage = Product.getTotalPages();
         model.addAttribute("currentPage", currentPage);
+        if (qs != null && !qs.isEmpty()) {
+            qs = qs.replace("page=" + (currentPage + 1), "");
+
+        }
+        model.addAttribute("qs", qs);
         model.addAttribute("totalPage", totalPage);
         model.addAttribute("arrProduct", arrProduct);
         return "client/product/shop";
+
     }
 
 }

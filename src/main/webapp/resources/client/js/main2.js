@@ -218,47 +218,87 @@
 
 
 )(jQuery);
+// <<<<<-----filter------->>>>>//////
 const checkInput = document.querySelectorAll('.form-check-input');
 const arr = Object.values(checkInput);
 
 const filter = document.getElementById('filter')
 let Link = "http://localhost:8080/products?page=1";
+const queryString = window.location.search;
+const urlParams = new URLSearchParams(queryString);
+let URL_factoryNames = urlParams.get('factoryNames')
+let URL_price_range = urlParams.get('price_range')
+let URL_targetNames = urlParams.get('targetNames')
+let URL_sortOptional = urlParams.get('sortOptional')
+arr.forEach(e => {
+    if (e.value == URL_factoryNames || e.value == URL_price_range || e.value == URL_targetNames || e.value == URL_sortOptional) {
+        e.setAttribute("checked", "true");
 
+    }
+})
+console.log(URL_price_range)
 filter.onclick = (event) => {
     Link = "http://localhost:8080/products?page=1";
     let factoryNames = [];
     let price_range = [];
     let targetNames = [];
+    let sort = "";
     let max = 0;
     let min = 0;
+
     arr.forEach(e => {
 
         if (e.checked && e.className.includes("factory")) {
             factoryNames.push(e.value)
+
             Link = `http://localhost:8080/products?page=1&factoryNames=${factoryNames}`;
         }
         else if (e.checked && e.className.includes("price_range")) {
             price_range.push(e.value)
+
             Link = `${Link}` + `&price_range=${price_range}`;
-
         }
-
         else if (e.checked && e.className.includes("target")) {
-
             targetNames.push(e.value);
+
             Link = `http://localhost:8080/products?page=1&factoryNames=${factoryNames}&targetNames=${targetNames}`;
 
         }
+        else if (e.checked && e.className.includes("sort")) {
+            sort = e.value;
+
+            Link = `${Link}` + `&sortOptional=${sort}`;
+
+        }
 
 
 
 
-        // event.preventDefault()
         filter.href = Link;
 
+
+
     })
-    console.log(Link)
+
 };
+const search = document.getElementById('search_button');
+const checkInputSearch = document.querySelector('.search');
+let link = "http://localhost:8080/products?page=1";
+search.onclick = () => {
+    link = `http://localhost:8080/products?page=1&nameOptional=${checkInputSearch.value}`;
+
+    search.href = link;
+}
+
+checkInputSearch.onkeydown = (e) => {
+    if (e.which == 13) {
+
+        window.location.replace(`http://localhost:8080/products?page=1&nameOptional=${checkInputSearch.value}`);
+    }
+
+
+
+}
 
 
 

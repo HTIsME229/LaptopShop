@@ -34,6 +34,11 @@
 
                     <!-- Template Stylesheet -->
                     <link href="/client/css/homepage.css" rel="stylesheet">
+                    <style>
+                        ::-webkit-scrollbar {
+                            display: none;
+                        }
+                    </style>
                 </head>
 
                 <body>
@@ -140,19 +145,20 @@
                                         <div class="col-lg-12">
                                             <nav>
                                                 <div class="nav nav-tabs mb-3">
-                                                    <button class="nav-link active border-white border-bottom-0 active"
+                                                    <button class="nav-link  border-white border-bottom-0 "
                                                         type="button" role="tab" id="nav-about-tab" data-bs-toggle="tab"
                                                         data-bs-target="#nav-about" aria-controls="nav-about"
                                                         aria-selected="true">Description</button>
-                                                    <button class="nav-link border-white border-bottom-0 " type="button"
-                                                        role="tab" id="nav-mission-tab" data-bs-toggle="tab"
-                                                        data-bs-target="#nav-mission" aria-controls="nav-mission"
+                                                    <button class="nav-link active border-white border-bottom-0 "
+                                                        type="button" role="tab" id="nav-mission-tab"
+                                                        data-bs-toggle="tab" data-bs-target="#nav-mission"
+                                                        aria-controls="nav-mission"
                                                         aria-selected="true">Reviews</button>
 
                                                 </div>
                                             </nav>
                                             <div class="tab-content mb-5">
-                                                <div class="tab-pane active" id="nav-about" role="tabpanel"
+                                                <div class="tab-pane " id="nav-about" role="tabpanel"
                                                     aria-labelledby="nav-about-tab">
                                                     <p>${dataProduct.detailDesc} </p>
                                                     <div class="px-2">
@@ -208,7 +214,8 @@
                                                     </div>
                                                 </div>
 
-                                                <div class="tab-pane" id="nav-mission" role="tabpanel"
+                                                <div class="tab-pane active" id="nav-mission" role="tabpanel"
+                                                    style="height: 500px; overflow: auto"
                                                     aria-labelledby="nav-mission-tab">
                                                     <c:forEach items="${review}" var="review">
                                                         <div class="d-flex">

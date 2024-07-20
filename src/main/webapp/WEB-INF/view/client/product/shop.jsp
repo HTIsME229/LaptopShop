@@ -59,6 +59,13 @@
 
                 <!-- Modal Search Start -->
                 <div class="container-fluid fruite py-5 mt-4 mx-auto">
+                    <div class="position-relative mt-5 ">
+                        <input class="form-control border-2 border-secondary w-75 py-3 px-4 rounded-pill mx-auto search"
+                            type="text" placeholder="Search">
+                        <a href=""
+                            class="btn btn-primary border-2 border-secondary py-3 px-4 position-absolute rounded-pill text-white h-100 "
+                            id="search_button" style="top: 0; right: 12%;">Search Now</a>
+                    </div>
                     <div class="container py-5">
                         <div class="row">
                             <div class="col-4 col-md-3">
@@ -143,7 +150,7 @@
 
                                         <div class="form-check form-check-inline">
                                             <input class="form-check-input price_range" type="radio" id="price-3"
-                                                value="10-15-trieu " name="price">
+                                                value="10-15-trieu" name="price">
                                             <label class="form-check-label" for="price-3">Từ 10 - 15
                                                 triệu</label>
                                         </div>
@@ -165,20 +172,20 @@
                                         <div class="mb-2"><b>Sắp xếp</b></div>
 
                                         <div class="form-check form-check-inline">
-                                            <input class="form-check-input" type="radio" id="sort-1"
+                                            <input class="form-check-input sort" type="radio" id="sort-1"
                                                 value="gia-tang-dan" name="radio-sort">
                                             <label class="form-check-label" for="sort-1">Giá tăng dần</label>
                                         </div>
 
                                         <div class="form-check form-check-inline">
-                                            <input class="form-check-input" type="radio" id="sort-2"
+                                            <input class="form-check-input sort" type="radio" id="sort-2"
                                                 value="gia-giam-dan" name="radio-sort">
                                             <label class="form-check-label" for="sort-2">Giá giảm dần</label>
                                         </div>
 
                                         <div class="form-check form-check-inline">
-                                            <input class="form-check-input" type="radio" id="sort-3" value="gia-nothing"
-                                                name="radio-sort">
+                                            <input class="form-check-input sort" type="radio" id="sort-3"
+                                                value="gia-nothing" name="radio-sort">
                                             <label class="form-check-label" for="sort-3">Không sắp xếp</label>
                                         </div>
 
@@ -197,48 +204,54 @@
                                     <div id="tab-1" class="tab-pane fade show p-0 active">
 
                                         <div class="col-lg-12 ">
+                                            <c:if test="${not empty arrProduct}">
+                                                <div class="information information-shop">
+                                                    <c:forEach items="${arrProduct}" var="item">
 
-                                            <div class="information information-shop">
-                                                <c:forEach items="${arrProduct}" var="item">
+                                                        <div class=" item border border-secondary border-top-0 rounded-bottom "
+                                                            style="padding: 0px 0px;">
+                                                            <div class="rounded position-relative fruite-item">
+                                                                <div class="fruite-img">
+                                                                    <img src="/images/product/${item.image}"
+                                                                        class="img-fluid w-100 rounded-top" alt="">
+                                                                </div>
+                                                                <div class="text-white bg-secondary px-3 py-1 rounded position-absolute"
+                                                                    style="top: 10px; left: 10px;">Laptop</div>
+                                                                <div class="  p-4 tech ">
+                                                                    <h4> <a href="/product/${item.id}">${item.name}</a>
+                                                                    </h4>
+                                                                    <p class=" shortDesc ">${item.shortDesc}</p>
+                                                                    <div
+                                                                        class="action d-flex justify-content-between  align-middle">
+                                                                        <p class="text-dark fs-5 fw-bold mb-0">$/
+                                                                            <fmt:formatNumber type="number"
+                                                                                value="${item.price}" />đ
 
-                                                    <div class=" item border border-secondary border-top-0 rounded-bottom "
-                                                        style="padding: 0px 0px;">
-                                                        <div class="rounded position-relative fruite-item">
-                                                            <div class="fruite-img">
-                                                                <img src="/images/product/${item.image}"
-                                                                    class="img-fluid w-100 rounded-top" alt="">
-                                                            </div>
-                                                            <div class="text-white bg-secondary px-3 py-1 rounded position-absolute"
-                                                                style="top: 10px; left: 10px;">Laptop</div>
-                                                            <div class="  p-4 tech ">
-                                                                <h4> <a href="/product/${item.id}">${item.name}</a></h4>
-                                                                <p class=" shortDesc ">${item.shortDesc}</p>
-                                                                <div
-                                                                    class="action d-flex justify-content-between  align-middle">
-                                                                    <p class="text-dark fs-5 fw-bold mb-0">$/
-                                                                        <fmt:formatNumber type="number"
-                                                                            value="${item.price}" />đ
+                                                                        </p>
+                                                                        <form action="/add-product-to-cart/${item.id}"
+                                                                            method="post">
+                                                                            <input type="hidden"
+                                                                                name="${_csrf.parameterName}"
+                                                                                value="${_csrf.token}" />
 
-                                                                    </p>
-                                                                    <form action="/add-product-to-cart/${item.id}"
-                                                                        method="post">
-                                                                        <input type="hidden"
-                                                                            name="${_csrf.parameterName}"
-                                                                            value="${_csrf.token}" />
-
-                                                                        <button
-                                                                            class="btn border border-secondary rounded-pill px-3 text-primary"><i
-                                                                                class="fa fa-shopping-bag me-2 text-primary"></i>
-                                                                            Add to cart</button>
-                                                                    </form>
+                                                                            <button
+                                                                                class="btn border border-secondary rounded-pill px-3 text-primary"><i
+                                                                                    class="fa fa-shopping-bag me-2 text-primary"></i>
+                                                                                Add to cart</button>
+                                                                        </form>
+                                                                    </div>
                                                                 </div>
                                                             </div>
                                                         </div>
-                                                    </div>
-                                                </c:forEach>
+                                                    </c:forEach>
 
 
-                                            </div>
+                                                </div>
+                                            </c:if>
+                                            <c:if test="${empty arrProduct}">
+                                                <h1 class="alert my-5">Not Found Product </h1>
+                                            </c:if>
+
                                         </div>
                                     </div>
                                 </div>
@@ -246,7 +259,7 @@
                                     <ul class="pagination justify-content-center d-flex">
                                         <c:if test="${currentPage ne 0}">
                                             <li class="page-item">
-                                                <a class="page-link" href="/products?page=${currentPage}"
+                                                <a class="page-link" href="/products?page=${currentPage}${qs}"
                                                     aria-label="Previous">
                                                     <span aria-hidden="true">&laquo;</span>
                                                 </a>
@@ -256,14 +269,14 @@
                                         <c:forEach var="i" begin="1" end="${totalPage}">
                                             <li class="page-item">
                                                 <a class="page-link ${i == currentPage + 1  ? 'active':''}"
-                                                    href="/products?page=${i}">
+                                                    href="/products?page=${i}${qs}">
                                                     ${i}
                                                 </a>
                                             </li>
                                         </c:forEach>
                                         <c:if test="${currentPage +1 lt totalPage}">
                                             <li class="page-item">
-                                                <a class="page-link" href="/products?page=${currentPage+2}"
+                                                <a class="page-link" href="/products?page=${currentPage+2}${qs}"
                                                     aria-label="Next">
                                                     <span aria-hidden="true">&raquo;</span>
                                                 </a>

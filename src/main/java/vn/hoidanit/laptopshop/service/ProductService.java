@@ -5,12 +5,15 @@ import java.util.List;
 import java.util.Optional;
 
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
 
 import jakarta.transaction.Transactional;
+import jakarta.validation.constraints.Null;
 import vn.hoidanit.laptopshop.domain.Order;
 import vn.hoidanit.laptopshop.domain.OrderDetail;
 import vn.hoidanit.laptopshop.domain.Product;
@@ -19,6 +22,7 @@ import vn.hoidanit.laptopshop.domain.Review;
 import vn.hoidanit.laptopshop.domain.User;
 import vn.hoidanit.laptopshop.domain.cart;
 import vn.hoidanit.laptopshop.domain.cartDetails;
+import vn.hoidanit.laptopshop.domain.dto.ProductCriteriaDTO;
 import vn.hoidanit.laptopshop.repository.CartDetailsRepository;
 import vn.hoidanit.laptopshop.repository.CartRepository;
 import vn.hoidanit.laptopshop.repository.OrderDetailsRepository;
@@ -61,28 +65,84 @@ public class ProductService {
         return this.productRespository.findAll(pageable);
     }
 
-    public Page<Product> handleGetAllProDuctWithSpec(Pageable pageable, String name, List<String> factory, int start,
-            int end, int max, int min, List<String> target) {
+    public Page<Product> handleGetAllProDuctWithSpec(Pageable pageable, ProductCriteriaDTO productCriteriaDTO) {
         Specification<Product> spec = Specification.where(null);
-        if (name != null) {
-            spec = spec.and(ProducSpecs.nameLike(name));
+
+        if (productCriteriaDTO.getNameOptional() != null) {
+            String name = productCriteriaDTO.getNameOptional().isPresent() ? productCriteriaDTO.getNameOptional().get()
+                    : "";
+            if (!name.equals(""))
+                spec = spec.and(ProducSpecs.nameLike(name));
         }
-        if (factory != null && !factory.isEmpty()) {
-            spec = spec.and(ProducSpecs.factoryLike(factory));
+        if (productCriteriaDTO.getFactoryNames() != null) {
+            List<String> factory = productCriteriaDTO.getFactoryNames().isPresent()
+                    ? productCriteriaDTO.getFactoryNames().get()
+                    : new ArrayList<>();
+            if (!factory.isEmpty())
+                spec = spec.and(ProducSpecs.factoryLike(factory));
         }
-        if (start != 0 && end != 0) {
-            spec = spec.and(ProducSpecs.betweenPrice(start, end));
-        }
-        if (max != 0) {
-            spec = spec.and(ProducSpecs.maxPrice(max));
-        }
-        if (min != 0) {
-            spec = spec.and(ProducSpecs.minPrice(min));
-        }
-        if (target != null && !target.isEmpty()) {
-            spec = spec.and(ProducSpecs.targetLike(target));
+        if (productCriteriaDTO.getPrice_range() != null) {
+            int max = 0;
+            int min = 0;
+            int start = 0;
+            int end = 1000000000;
+            String Price_range = productCriteriaDTO.getPrice_range().isPresent()
+                    ? productCriteriaDTO.getPrice_range().get()
+                    : "";
+
+            switch (Price_range) {
+                case "10-15-trieu":
+                    start = 10000000;
+                    end = 15000000;
+                    spec = spec.and(ProducSpecs.betweenPrice(start, end));
+                    break;
+                case "10-20-trieu":
+                    start = 15000000;
+                    end = 20000000;
+                    spec = spec.and(ProducSpecs.betweenPrice(start, end));
+                    break;
+                case "duoi-10-trieu":
+                    max = 10000000;
+                    spec = spec.and(ProducSpecs.maxPrice(max));
+                    break;
+                case "tren-20-trieu":
+                    min = 20000000;
+                    spec = spec.and(ProducSpecs.minPrice(min));
+                    break;
+
+                default:
+                    break;
+
+            }
+
         }
 
+        if (productCriteriaDTO.getTargetNames() != null) {
+            List<String> target = productCriteriaDTO.getTargetNames().isPresent()
+                    ? productCriteriaDTO.getTargetNames().get()
+                    : new ArrayList<>();
+            if (!target.isEmpty())
+                spec = spec.and(ProducSpecs.targetLike(target));
+        }
+
+        if (productCriteriaDTO.getSortOptional() != null) {
+            String sort = productCriteriaDTO.getSortOptional().isPresent() ? productCriteriaDTO.getSortOptional().get()
+                    : "";
+            if (sort.equals("gia-tang-dan")) {
+                pageable = PageRequest.of(productCriteriaDTO.getPage() != null
+                        ? (productCriteriaDTO.getPage().isPresent()
+                                ? productCriteriaDTO.getPage().get() - 1
+                                : 0)
+                        : 0, 8, Sort.by("price"));
+            } else if (sort.equals("gia-giam-dan")) {
+                pageable = PageRequest.of(productCriteriaDTO.getPage() != null
+                        ? (productCriteriaDTO.getPage().isPresent()
+                                ? productCriteriaDTO.getPage().get() - 1
+                                : 0)
+                        : 0, 8, Sort.by("price").descending());
+            }
+
+        }
         return this.productRespository.findAll(spec, pageable);
 
     }
