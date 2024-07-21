@@ -107,6 +107,9 @@
                                                 <fmt:formatNumber type="number" value="${dataProduct.price}" />đ
 
                                             </h5>
+                                            <p class="mb-3">Quantity:${dataProduct.quantity gt 0 ? dataProduct.quantity
+                                                : 'Sold
+                                                Out' }</p>
                                             <div class="d-flex mb-4">
                                                 <i class="fa fa-star text-secondary"></i>
                                                 <i class="fa fa-star text-secondary"></i>
@@ -130,17 +133,18 @@
                                                     </button>
                                                 </div>
                                             </div>
-                                            <form action="/add-product-to-cart/${dataProduct.id}" method="post">
-                                                <input type="hidden" name="${_csrf.parameterName}"
-                                                    value="${_csrf.token}" />
-                                                <input type="hidden" class="currentQuantity" name="currentQuantity"
-                                                    type="number">
-                                                <button type="submit"
-                                                    class="btn border border-secondary rounded-pill px-4 py-2 mb-4 text-primary"><i
-                                                        class="fa fa-shopping-bag me-2 text-primary"></i> Add to
-                                                    cart</button>
-                                            </form>
-
+                                            <c:if test="${dataProduct.quantity gt 0 }">
+                                                <form action="/add-product-to-cart/${dataProduct.id}" method="post">
+                                                    <input type="hidden" name="${_csrf.parameterName}"
+                                                        value="${_csrf.token}" />
+                                                    <input type="hidden" class="currentQuantity" name="currentQuantity"
+                                                        type="number">
+                                                    <button type="submit"
+                                                        class="btn border border-secondary rounded-pill px-4 py-2 mb-4 text-primary"><i
+                                                            class="fa fa-shopping-bag me-2 text-primary"></i> Add to
+                                                        cart</button>
+                                                </form>
+                                            </c:if>
                                         </div>
                                         <div class="col-lg-12">
                                             <nav>

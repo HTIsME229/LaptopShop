@@ -340,4 +340,12 @@ public class ProductService {
         User user = userService.getUserByEmail(email);
         return orderRepository.findByUser(user);
     }
+
+    @Transactional
+    public void handleControlQuantityOfProduct(Product product, long quantity) {
+        product.setQuantity(product.getQuantity() - quantity);
+        // if (product.getQuantity() == 0) {
+        // productRespository.delete(product);
+        // }
+    }
 }

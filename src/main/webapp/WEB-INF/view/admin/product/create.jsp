@@ -116,8 +116,13 @@
                                                         <form:select path="factory" class="form-select "
                                                             aria-label="Default select example">
                                                             <form selected>Select Factory</form>
-                                                            <form:option value="APPLE">Appple</form:option>
-                                                            <form:option value="SAMSUNG">Samsung</form:option>
+                                                            <form:option value="APPLE">Apple</form:option>
+                                                            <form:option value="ASUS">Asus</form:option>
+                                                            <form:option value="LENOVO">Lenovo</form:option>
+                                                            <form:option value="DELL">Dell</form:option>
+                                                            <form:option value="LG">LG </form:option>
+                                                            <form:option value="ACER">Acer</form:option>
+
                                                         </form:select>
 
                                                     </div>
@@ -127,7 +132,15 @@
                                                             aria-label="Default select example">
                                                             <form selected>Select Target</form>
                                                             <form:option value="GAMING">Gaming</form:option>
-                                                            <form:option value="MACBOOK">Macbook</form:option>
+                                                            <form:option value="SINHVIEN-VANPHONG">Student-Office
+                                                            </form:option>
+                                                            <form:option value="THIET-KE-DO-HOA">Graphic Design
+                                                            </form:option>
+                                                            <form:option value="MONG-NHE">Soft
+                                                            </form:option>
+                                                            <form:option value="DOANH-NHAN">Business
+                                                            </form:option>
+
                                                         </form:select>
 
                                                     </div>

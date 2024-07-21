@@ -86,7 +86,14 @@ public class OrderController {
     public String postMethodName(@PathVariable long id, @ModelAttribute("order") Order order) {
 
         Order oldOrder = this.productService.handleGetOrderById(id);
+        List<OrderDetail> od = oldOrder.getOrderDetails();
         oldOrder.setStatus(order.getStatus());
+
+        if (order.getStatus().equals("COMPLETE")) {
+            for (OrderDetail orderDetail : od) {
+                this.productService.handleControlQuantityOfProduct(orderDetail.getProduct(), orderDetail.getQuantity());
+            }
+        }
         this.productService.handleSaveOrder(oldOrder);
 
         return "redirect:/admin/order";

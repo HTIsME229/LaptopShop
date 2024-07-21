@@ -228,17 +228,26 @@
                                                                                 value="${item.price}" />đ
 
                                                                         </p>
-                                                                        <form action="/add-product-to-cart/${item.id}"
-                                                                            method="post">
-                                                                            <input type="hidden"
-                                                                                name="${_csrf.parameterName}"
-                                                                                value="${_csrf.token}" />
+                                                                        <c:if test="${item.quantity gt 0  }">
+                                                                            <form
+                                                                                action="/add-product-to-cart/${item.id}"
+                                                                                method="post">
+                                                                                <input type="hidden"
+                                                                                    name="${_csrf.parameterName}"
+                                                                                    value="${_csrf.token}" />
 
-                                                                            <button
-                                                                                class="btn border border-secondary rounded-pill px-3 text-primary"><i
-                                                                                    class="fa fa-shopping-bag me-2 text-primary"></i>
-                                                                                Add to cart</button>
-                                                                        </form>
+                                                                                <button
+                                                                                    class="btn border border-secondary rounded-pill px-3 text-primary"><i
+                                                                                        class="fa fa-shopping-bag me-2 text-primary"></i>
+                                                                                    Add to cart</button>
+                                                                            </form>
+                                                                        </c:if>
+                                                                        <c:if test="${item.quantity eq 0  }">
+                                                                            <p class="text-warning text-center"
+                                                                                style=" margin: 0px ;">Sold Out
+                                                                            </p>
+
+                                                                        </c:if>
                                                                     </div>
                                                                 </div>
                                                             </div>

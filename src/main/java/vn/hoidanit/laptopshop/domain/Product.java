@@ -31,7 +31,7 @@ public class Product {
     private String detailDesc;
     @NotEmpty(message = " Không Được Để Trống")
     private String shortDesc;
-    @Min(1)
+    @Min(0)
     private long quantity;
     private long sold;
     private String factory;
