@@ -12,7 +12,7 @@ WORKDIR /hoidanit/spring-mvc
 RUN mvn clean package -DskipTests
 
 # Use a Tomcat image as the base for the final stage
-FROM tomcat:9.0-jdk17-slim
+FROM tomcat:9.0-jdk17
 
 # Copy WAR file to the webapps directory in Tomcat
 COPY --from=build /hoidanit/spring-mvc/target/*.war /usr/local/tomcat/webapps/app.war
